@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.common.FileStorageProperties;
 import com.example.demo.common.RandomGUID;
+import com.example.demo.common.ZonedDateTimeReadConverter;
+import com.example.demo.common.ZonedDateTimeWriteConverter;
 import com.example.demo.domain.UserFileAssociation;
 import com.example.demo.dto.UserFileAssociationDto;
 import com.example.demo.embeded.dto.UserFileMetaData;
@@ -59,13 +64,13 @@ public class UserFileAssociationLogic {
 			userAssociation.setFiles(metadata);
 			userAssociation.setId(globalId);
 			userAssociation.setUsed(false);
+			userAssociation.setUserName(request.getUserName());
 		//	userAssociation.setCreatedAt(new DateTime());
 			//userAssociation.setUpdatedAt(new DateTime());			
 		//	eventPublisher.publishEvent(new ChecklistFileAdded(this.userSecurityUtils.getCurrentUserActor(0),
 			//		checklistAssociation, metadata.get(0).getInternalFileName()));
 		}
-		this.userFileAssociationRepository.save(userAssociation);
-		return userAssociation;
+		return this.userFileAssociationRepository.save(userAssociation);
 	}
 
 	public UserFileAssociation addFilesToExistingChecklistFileAssociation(UserFileAssociationDto request,
@@ -80,7 +85,8 @@ public class UserFileAssociationLogic {
 			List<UserFileMetaData> metadata = addFiles(request.getAddedFiles(), files, request.getGlobalId());
 			response.getFiles().addAll(metadata);			
 		}
-		response.setUpdatedAt(new DateTime());
+		//response.setUpdatedAt(new Date());
+		
 		this.userFileAssociationRepository.save(response);
 		return response;
 	}
@@ -116,9 +122,14 @@ public class UserFileAssociationLogic {
 
 				long bytes = files.get(i).getSize();
 				userMetaData.setFileSize(bytes);
-				//response.add(userMetaData);
-
-				//userMetaData.setUploadTime(new DateTime());
+				ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneOffset.UTC);
+				//ZonedDateTimeReadConverter now2 = new ZonedDateTimeReadConverter();
+				//ZonedDateTime a = now2.convert(new Date());
+				ZonedDateTimeWriteConverter now = new ZonedDateTimeWriteConverter();
+				Date date = now.convert(zonedDateTime);			
+				System.out.println( "/////////////" + date);
+				userMetaData.setUploadTime(date);
+				response.add(userMetaData);
 			}
 		}
 		return response;

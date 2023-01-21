@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -20,8 +21,8 @@ public class UserFileAssociation {
 	 private String userName;
 	 public List<UserFileMetaData> files;
 	 private boolean isUsed;
-	 private DateTime createdAt;		
-	 private DateTime updatedAt;
+	 private ZonedDateTime createdAt;		
+	 private ZonedDateTime updatedAt;
 	public String getId() {
 		return id;
 	}
@@ -31,16 +32,16 @@ public class UserFileAssociation {
 	public void setUsed(boolean isUsed) {
 		this.isUsed = isUsed;
 	}
-	public DateTime getCreatedAt() {
+	public ZonedDateTime getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(DateTime createdAt) {
+	public void setCreatedAt(ZonedDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-	public DateTime getUpdatedAt() {
+	public ZonedDateTime getUpdatedAt() {
 		return updatedAt;
 	}
-	public void setUpdatedAt(DateTime updatedAt) {
+	public void setUpdatedAt(ZonedDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	public void setId(String id) {

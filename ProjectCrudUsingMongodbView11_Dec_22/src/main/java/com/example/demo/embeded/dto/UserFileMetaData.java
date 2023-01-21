@@ -1,6 +1,7 @@
 package com.example.demo.embeded.dto;
 
-import org.joda.time.DateTime;
+import java.util.Date;
+
 
 import com.example.demo.enums.UserAttachmentEnum;
 
@@ -17,10 +18,8 @@ public class UserFileMetaData {
     private String mimeType;
 	
     private long fileSize;
-	
-    private String userName;
-	
-    private DateTime uploadTime; 
+		
+    private Date uploadTime; 
 	
     private UserAttachmentEnum userAttachmentEnum;
 
@@ -64,19 +63,11 @@ public class UserFileMetaData {
 		this.fileSize = fileSize;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public DateTime getUploadTime() {
+	public Date getUploadTime() {
 		return uploadTime;
 	}
 
-	public void setUploadTime(DateTime uploadTime) {
+	public void setUploadTime(Date uploadTime) {
 		this.uploadTime = uploadTime;
 	}
 
