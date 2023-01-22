@@ -1,6 +1,5 @@
 package com.example.demo.domain;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -13,7 +12,6 @@ import com.example.demo.embeded.dto.UserFileMetaData;
 import lombok.Data;
 
 @Document
-//@Data
 public class UserFileAssociation {
 
 	 @Id 
@@ -21,8 +19,8 @@ public class UserFileAssociation {
 	 private String userName;
 	 public List<UserFileMetaData> files;
 	 private boolean isUsed;
-	 private ZonedDateTime createdAt;		
-	 private ZonedDateTime updatedAt;
+	 private DateTime createdAt;		
+	 private DateTime updatedAt;
 	public String getId() {
 		return id;
 	}
@@ -32,16 +30,16 @@ public class UserFileAssociation {
 	public void setUsed(boolean isUsed) {
 		this.isUsed = isUsed;
 	}
-	public ZonedDateTime getCreatedAt() {
+	public DateTime getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(ZonedDateTime createdAt) {
+	public void setCreatedAt(DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-	public ZonedDateTime getUpdatedAt() {
+	public DateTime getUpdatedAt() {
 		return updatedAt;
 	}
-	public void setUpdatedAt(ZonedDateTime updatedAt) {
+	public void setUpdatedAt(DateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	public void setId(String id) {

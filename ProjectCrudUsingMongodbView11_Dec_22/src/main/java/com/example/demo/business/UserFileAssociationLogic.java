@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -40,17 +41,18 @@ public class UserFileAssociationLogic {
 	private FileLogic fileLogic;
 	@Autowired
 	private FileStorageProperties fileStorageProperties;
-    public static final String FILE_DOWNLOAD_URL = "/resource/fileDownload/user/%s/filename/%s";
+	@Autowired
+	private LogicUtils logicUtils;
+	public static final String FILE_DOWNLOAD_URL = "/resource/fileDownload/user/%s/filename/%s";
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserFileAssociationLogic.class);
 
 	public UserFileAssociation addUpdateUserFiles(UserFileAssociationDto request, List<MultipartFile> files) {
 
 		if (Objects.nonNull(request.getGlobalId())) {
-			UserFileAssociation response = this.userFileAssociationRepository.findById(request.getGlobalId())
-					.get();
+			UserFileAssociation response = this.userFileAssociationRepository.findById(request.getGlobalId()).get();
 
 			return addFilesToExistingChecklistFileAssociation(request, files, response);
-		} 
+		}
 		return saveChecklistFileAssociationWithoutGlobalGuid(request, files);
 
 	}
@@ -64,11 +66,12 @@ public class UserFileAssociationLogic {
 			userAssociation.setFiles(metadata);
 			userAssociation.setId(globalId);
 			userAssociation.setUsed(false);
-			userAssociation.setUserName(request.getUserName());
-		//	userAssociation.setCreatedAt(new DateTime());
-			//userAssociation.setUpdatedAt(new DateTime());			
-		//	eventPublisher.publishEvent(new ChecklistFileAdded(this.userSecurityUtils.getCurrentUserActor(0),
-			//		checklistAssociation, metadata.get(0).getInternalFileName()));
+			userAssociation.setUserName("radhikamendhe@gmail.com");
+			 userAssociation.setCreatedAt(new DateTime());
+			 userAssociation.setUpdatedAt(new DateTime());
+			// eventPublisher.publishEvent(new
+			// ChecklistFileAdded(this.userSecurityUtils.getCurrentUserActor(0),
+			// checklistAssociation, metadata.get(0).getInternalFileName()));
 		}
 		return this.userFileAssociationRepository.save(userAssociation);
 	}
@@ -77,16 +80,15 @@ public class UserFileAssociationLogic {
 			List<MultipartFile> files, UserFileAssociation response) {
 
 		if (Objects.nonNull(request.getRemovedFiles()) && !request.getRemovedFiles().isEmpty()) {
-
 			request.getRemovedFiles()
 					.forEach(file -> response.getFiles().removeIf(a -> a.getInternalFileName().equals(file)));
 		}
 		if (Objects.nonNull(request.getAddedFiles()) && !request.getAddedFiles().isEmpty()) {
 			List<UserFileMetaData> metadata = addFiles(request.getAddedFiles(), files, request.getGlobalId());
-			response.getFiles().addAll(metadata);			
+			response.getFiles().addAll(metadata);
 		}
-		//response.setUpdatedAt(new Date());
-		
+		 response.setUpdatedAt(new DateTime());
+
 		this.userFileAssociationRepository.save(response);
 		return response;
 	}
@@ -123,11 +125,11 @@ public class UserFileAssociationLogic {
 				long bytes = files.get(i).getSize();
 				userMetaData.setFileSize(bytes);
 				ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneOffset.UTC);
-				//ZonedDateTimeReadConverter now2 = new ZonedDateTimeReadConverter();
-				//ZonedDateTime a = now2.convert(new Date());
+				// ZonedDateTimeReadConverter now2 = new ZonedDateTimeReadConverter();
+				// ZonedDateTime a = now2.convert(new Date());
 				ZonedDateTimeWriteConverter now = new ZonedDateTimeWriteConverter();
-				Date date = now.convert(zonedDateTime);			
-				System.out.println( "/////////////" + date);
+				Date date = now.convert(zonedDateTime);
+				System.out.println("/////////////" + date);
 				userMetaData.setUploadTime(date);
 				response.add(userMetaData);
 			}
@@ -135,40 +137,31 @@ public class UserFileAssociationLogic {
 		return response;
 	}
 
-/*	public Map<String, UserFileAssociation> getChecklistFileAssociation(String activityGuid,
-			String prerequisiteGuid) {
-		Map<String, UserFileAssociation> checkFileMap = PrerequisiteUtils
-				.checkListFileMap(this.getChecklistFileAssociationList(activityGuid, prerequisiteGuid));
+	public UserFileAssociation loadUserFiles(String id) {
+		if (Objects.isNull(id))
+			return null;
+		Optional<UserFileAssociation> optional = userFileAssociationRepository.findById(id);
 
-		return checkFileMap;
+		if (!optional.isPresent())
+			// throw new IllegalArgumentException(logicUtils.getIllegalGuidMessage(id));
+			// throw new IllegalArgumentException(logicUtils.getPowerBiUrlExpired());
+			throw new IllegalArgumentException("An invalid object identity was specified"+id);
+
+		return optional.get();
 	}
 
-	public List<ChecklistFileAssociation> getChecklistFileAssociationList(String activityGuid,
-			String prerequisiteGuid) {
-		Activity activity = activityReadRepository.findByGuid(activityGuid);
+	public List<UserFileAssociation> getUserFileAssociationList() {
 
-		List<ChecklistFileAssociation> checkFileList = checklistFileAssociationRepository
-				.findByPrerequisiteGuidAndProjectGuidAndActivityGuid(prerequisiteGuid, activity.getProjectGuid(),
-						activityGuid);
-
-		return checkFileList;
+		return userFileAssociationRepository.findAll();
 	}
-
-	public ChecklistFileAssociation loadCheckListFiles(String elementId, String activityGuid, String prerequisiteGuid) {
-
-		ChecklistFileAssociation result = checklistFileAssociationRepository
-				.findByElementIdAndActivityGuidAndPrerequisiteGuid(elementId, activityGuid, prerequisiteGuid);
-		return result;
-	}
-
-	public ChecklistFileAssociation removeCheckListFile(String serverFileName) {
-		ChecklistFileAssociation response = this.checklistFileAssociationRepository
-				.findByFiles_InternalFileName(serverFileName);
+	
+	public UserFileAssociation removeCheckListFile(String internalFileName) {
+		UserFileAssociation response = this.userFileAssociationRepository.findByFiles_InternalFileName(internalFileName);
 		if (Objects.nonNull(response)) {
-			response.getFiles().removeIf(a -> a.getInternalFileName().equals(serverFileName));
-			checklistFileAssociationRepository.save(response);
+			response.getFiles().removeIf(a -> a.getInternalFileName().equals(internalFileName));
+			userFileAssociationRepository.save(response);
 		}
 		return response;
-	}
-*/
+	} 
+	
 }
