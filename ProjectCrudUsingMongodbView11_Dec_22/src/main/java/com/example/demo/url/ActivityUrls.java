@@ -4,6 +4,8 @@ public class ActivityUrls {
 	private static final String PROJECT_PREFIX = "/project";
 	private static final String CONTACT_PREFIX = "/contact";
 	private static final String USERFILE_PREFIX = "/user";
+	private static final String ACTIVITY_PREFIX = "/activity";
+
 
 
 	public static class PathVars {
@@ -41,6 +43,7 @@ public class ActivityUrls {
 			public static final String COPY_CONTACT = CONTACT_PREFIX + "/{" + PathVars.CONTACT_ID + "}/copy";
             public  static final String ADD_UPDATE_USERFILES = USERFILE_PREFIX +"/add/update/files";
             public  static final String ADD_UPDATE_SINGLE_USERFILE = USERFILE_PREFIX +"/add/update/single/file";
+            public  static final String ACTIVITY_CREATE = ACTIVITY_PREFIX +"/create";
 		}
 		/*
 		 * Http.DELETE request URLs

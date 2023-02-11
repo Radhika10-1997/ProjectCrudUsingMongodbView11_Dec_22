@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.example.demo.data.document;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

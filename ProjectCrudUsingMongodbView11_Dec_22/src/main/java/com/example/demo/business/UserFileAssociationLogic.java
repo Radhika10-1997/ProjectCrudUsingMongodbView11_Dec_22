@@ -25,12 +25,12 @@ import com.example.demo.common.FileStorageProperties;
 import com.example.demo.common.RandomGUID;
 import com.example.demo.common.ZonedDateTimeReadConverter;
 import com.example.demo.common.ZonedDateTimeWriteConverter;
+import com.example.demo.data.document.UserFileAssociationRepository;
 import com.example.demo.domain.UserFileAssociation;
 import com.example.demo.dto.UserFileAssociationDto;
 import com.example.demo.embeded.dto.UserFileMetaData;
 import com.example.demo.enums.EntityAssociatedWithFile;
 import com.example.demo.enums.UserAttachmentEnum;
-import com.example.demo.repository.UserFileAssociationRepository;
 
 @Service
 public class UserFileAssociationLogic {

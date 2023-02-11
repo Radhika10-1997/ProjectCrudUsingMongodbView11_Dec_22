@@ -18,10 +18,10 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.example.demo.data.document.ContactRepository;
+import com.example.demo.data.document.UserRepository;
 import com.example.demo.domain.Contact;
 import com.example.demo.domain.User;
-import com.example.demo.repository.ContactRepository;
-import com.example.demo.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
