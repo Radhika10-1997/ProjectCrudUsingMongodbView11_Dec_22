@@ -3,7 +3,9 @@ package com.example.demo.dto;
 import java.util.List;
 
 public class ActivityDto {
-
+	
+	    private String id;
+	    
 	    private String name;
 
 	    private String description;
@@ -254,6 +256,14 @@ public class ActivityDto {
 
 	        this.activityTaskId = activityTaskId;
 	    }
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
 
 		
 	    

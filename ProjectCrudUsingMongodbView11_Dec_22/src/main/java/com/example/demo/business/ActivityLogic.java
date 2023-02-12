@@ -14,10 +14,8 @@ public class ActivityLogic {
 	@Autowired
 	private ActivityRepository activityRepository;
 
-	public Activity createActivity(ActivityDto activityDto) {
-        Activity newActivity = VisiLeanGraphObjectFactory.createNodeObjectInstance(Activity.class);
-        newActivity.setName(activityDto.getName());      
-		return activityRepository.save(newActivity);		
+	public Activity createActivity(Activity activityDomain) {
+		return activityRepository.save(activityDomain);		
 	}
 	
 	

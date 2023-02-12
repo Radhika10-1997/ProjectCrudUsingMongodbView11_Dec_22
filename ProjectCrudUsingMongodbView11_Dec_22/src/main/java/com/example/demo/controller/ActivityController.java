@@ -4,12 +4,16 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.api.response.BaseResponse;
 import com.example.demo.business.ActivityLogic;
 import com.example.demo.domain.Activity;
 import com.example.demo.dto.ActivityDto;
@@ -26,29 +30,15 @@ public class ActivityController {
 	@Autowired
 	private ActivityConversionService activityConversionService;
 	
-    @SuppressWarnings("unchecked")
-    @ApiOperation(value = " To  Create Activity ",
-            notes = "To  create activity  by passing below  info! ", response = ActivityDto.class)
-    @RequestMapping(value = ActivityUrls.V1.Post.ACTIVITY_CREATE, method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ActivityDto createActivity(@RequestBody ActivityDto activityDto)
-            {
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = " To  Create Activity ", notes = "To  create activity  by passing below  info! ", response = ActivityDto.class)
+	@RequestMapping(value = ActivityUrls.V1.Post.ACTIVITY_CREATE, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody ResponseEntity<Object> createActivity(@RequestBody ActivityDto activityDto) {
 
-      /*  Map<String, String> activityMap = new HashMap<String, String>();
-        ObjectMapper m = new ObjectMapper();
+		BaseResponse res = new BaseResponse(activityConversionService
+				.toDto(activityLogic.createActivity(activityConversionService.toDomain(activityDto))));
+		return new ResponseEntity<>(res, HttpStatus.OK);
 
-        activityMap = m.readValue(activityParams.get("activity"), HashMap.class);
-        Activity newActivity = this.activityCreateLogic.createActivity(activityMap);
-        if(Objects.nonNull(newActivity.getStartDate())
-                && Objects.nonNull(newActivity.getEndDate())) {
-            this.activityProcessDatesLogic.processParentPathsForDateChange(newActivity);
-            this.activityProcessDatesLogic.processParentPathsForActualStartDates(newActivity);
-        }
-        return this.activityConversionService.toDto(newActivity,
-                2, 0, this.getDtoCache());
-*/
-		return activityConversionService.toDto(activityLogic.createActivity(activityDto));
-    }
-	
+	}
 	
 }
